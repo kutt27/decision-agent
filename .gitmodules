@@ -1,0 +1,3 @@
+[submodule "vendor/mojo-dotenv"]
+	path = vendor/mojo-dotenv
+	url = https://github.com/databooth/mojo-dotenv

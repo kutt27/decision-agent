@@ -1,4 +1,5 @@
-from openrouter import handleCall;
+from openrouter import handleCall, test;
 
 def main() raises:   
-    handleCall()
+    test()
+    # handleCall()

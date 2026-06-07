@@ -1,4 +1,11 @@
 from std.python import Python
+from dotenv import dotenv_values, load_dotenv
+from std.os import getenv
+
+def test():
+    var api_key: String = dotenv_values(".env")
+    var key = api_key["OPENROUTER_KEY"]
+    print(key)
 
 def handleCall() raises:
     # 1. Import the Python requests library inside Mojo
