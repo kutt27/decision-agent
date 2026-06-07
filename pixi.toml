@@ -9,3 +9,5 @@ version = "0.1.0"
 
 [dependencies]
 mojo = ">=1.0.0b2.dev2026060606,<2"
+python = "<=3.10"
+requests = ">=2.34.2,<3"
