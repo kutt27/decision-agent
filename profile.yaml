@@ -1,0 +1,45 @@
+# =============================================================================
+# Decision Agent — Identity Profile
+# =============================================================================
+# This is the static "who I am" that grounds every decision analysis.
+# The agent reads this on every invocation to align recommendations
+# with your core values, vision, and anti-goals.
+# =============================================================================
+
+name: "User"
+
+# ── Core Values ─────────────────────────────────────────────────────────
+# The non-negotiable principles that define a good life.
+values:
+  - Autonomy
+  - Deep technical mastery
+  - Physical vitality
+
+# ── Long-Term Vision ─────────────────────────────────────────────────────
+# The north star — where you're ultimately headed.
+vision: >
+  Building foundational AI infrastructure from scratch,
+  moving beyond wrapper frameworks.
+
+# ── Anti-Goals ──────────────────────────────────────────────────────────
+# Concrete outcomes to avoid at all costs, no matter the short-term upside.
+anti_goals:
+  - "Trading time for status or titles"
+  - "Golden handcuffs (high pay, zero learning)"
+  - "Chronic burnout"
+
+# ── Decision Style ──────────────────────────────────────────────────────
+# Preferences that shape how the agent should frame its analysis.
+preferences:
+  risk_tolerance: "moderate"         # conservative | moderate | aggressive
+  decision_pace: "deliberate"        # quick | balanced | deliberate
+  communication_style: "direct"      # supportive | balanced | direct
+
+# ── Life Context ────────────────────────────────────────────────────────
+# Semi-stable context that rarely changes week-to-week.
+life_context:
+  current_focus: "Deep work in systems engineering and AI infrastructure"
+  constraints:
+    - "Time: limited — prioritize high-leverage activities"
+    - "Energy: protect deep work blocks from context-switching"
+    - "Learning: invest in compounding skills, not linear ones"

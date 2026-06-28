@@ -1,31 +1,69 @@
-import asyncio
-from agent import NorthStarAgent
+"""
+decision-agent — main.py
+=========================
+Interactive REPL that runs the decision agent in a multi-turn loop.
 
-# this will be os.file() from a static file.
-# The foundational data structure defining who you are
-MY_IDENTITY_CORE = {
-    "values": ["Autonomy", "Deep technical mastery", "Physical vitality"],
-    "vision": "Building foundational AI infrastructure from scratch, moving beyond wrapper frameworks.",
-    "anti_goals": ["Trading time for status/titles", "Golden handcuffs (high pay, zero learning)", "Chronic burnout"]
-}
+Usage:
+  python main.py                    # Full interactive mode
+  python main.py "Should I..."      # Single query, then interactive
+"""
 
-async def main():
-    # Initialize the agent with your core pillars
-    agent = NorthStarAgent(user_profile=MY_IDENTITY_CORE)
+import sys
 
-    # Example Scenario: An emotional, potentially 'stupid' decision driven by FOMO or stress
-    high_stress_input = "I'm feeling completely stuck at my current coding speed. This big enterprise company offered me a management role making 2x money. It's zero coding, all meetings, but the cash is insane and I feel like I'm falling behind my peers financially. Should I take it tonight?"
+from agent import DecisionAgent
 
-    print("🧠 Analyzing decision space against your personal North Star...")
+# ── Colours / formatting helpers ─────────────────────────────────────────
 
-    # Simple semantic context injection simulation
-    relevant_past_notes = [
-        "Note from Jan: I promised myself I would spend 2026 mastering JAX and systems engineering.",
-        "Note from Mar: Corporate bureaucracy makes me want to pull my hair out."
-    ]
 
-    response = await agent.analyze_decision(high_stress_input, relevant_past_notes)
-    print(response)
+def blue(text: str) -> str:
+    return f"\033[94m{text}\033[0m"
+
+
+def green(text: str) -> str:
+    return f"\033[92m{text}\033[0m"
+
+
+def dim(text: str) -> str:
+    return f"\033[2m{text}\033[0m"
+
+
+def bold(text: str) -> str:
+    return f"\033[1m{text}\033[0m"
+
+
+# ── Main ────────────────────────────────────────────────────────────────
+
+
+def main():
+    agent = DecisionAgent()
+
+    # Optional: process a single query from CLI args
+    if len(sys.argv) > 1:
+        query = " ".join(sys.argv[1:])
+        print(f"\n{blue('You:')} {query}\n")
+        response = agent.process(query)
+        print(f"{green('Agent:')}\n{response}\n")
+        print(dim("─── Entering interactive mode ───\n"))
+
+    print(bold("🧠 Decision Agent — interactive mode"))
+    print(dim("Type your decision problem or question. Type 'exit' to quit.\n"))
+
+    while True:
+        try:
+            user_input = input(f"{blue('You:')} ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+
+        if not user_input:
+            continue
+
+        if user_input.lower() in ("exit", "quit", "/exit"):
+            break
+
+        response = agent.process(user_input)
+        print(f"\n{green('Agent:')}\n{response}\n")
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
