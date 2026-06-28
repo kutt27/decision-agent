@@ -14,17 +14,27 @@ Flow per user message:
   4. Save updated brain, append to conversation history, return message
 """
 
-import json
 import os
 import re
+from pathlib import Path
 from typing import Optional
 
 import httpx
 import yaml
 
+# Auto-load .env file if it exists (no dependency on manual sourcing)
+_env_path = Path(".env")
+if _env_path.exists():
+    try:
+        from dotenv import load_dotenv
+
+        load_dotenv(_env_path)
+    except ImportError:
+        pass  # python-dotenv not installed, user must source .env manually
+
 # ── Configuration ────────────────────────────────────────────────────────
 
-API_KEY = os.environ.get("OPENROUTER_API_KEY")
+API_KEY = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_KEY")
 API_URL = os.environ.get(
     "ENDPOINT",
     "https://openrouter.ai/api/v1/chat/completions",
@@ -32,7 +42,7 @@ API_URL = os.environ.get(
 
 # Default: cheap, fast, capable reasoning model available on OpenRouter.
 # Override via env var MODEL_NAME if desired.
-MODEL_NAME = os.environ.get("MODEL_NAME", "google/gemini-2.0-flash-001")
+MODEL_NAME = os.environ.get("MODEL_NAME", "google/gemini-3.5-flash")
 
 # ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -99,7 +109,7 @@ class DecisionAgent:
         try:
             raw_output = self._call_model(prompt)
         except Exception as e:
-            msg = f"⚠️ API call failed: {e}"
+            msg = f"⚠️ {e}"
             self.conversation.append({"role": "user", "content": user_input})
             self.conversation.append({"role": "assistant", "content": msg})
             return msg
@@ -169,7 +179,10 @@ Remember: raw truth, not people-pleasing. Do not optimise for validation."""
     def _call_model(self, messages: list[dict[str, str]]) -> str:
         """Sync call to an OpenRouter-compatible chat endpoint."""
         if not API_KEY:
-            return self._mock_response(messages)
+            raise RuntimeError(
+                "No API key found. Set OPENROUTER_API_KEY or OPENROUTER_KEY "
+                "in your .env file or environment."
+            )
 
         headers = {
             "Authorization": f"Bearer {API_KEY}",
@@ -188,40 +201,6 @@ Remember: raw truth, not people-pleasing. Do not optimise for validation."""
             response.raise_for_status()
             result = response.json()
             return result["choices"][0]["message"]["content"]
-
-    # ── Mock fallback (no API key) ───────────────────────────────────
-
-    def _mock_response(self, messages: list[dict[str, str]]) -> str:
-        """Return a simulated response for testing without an API key."""
-        last = messages[-1]["content"] if messages else ""
-
-        return f"""[TO_USER]
-Thanks for sharing that. I'm reading your situation against your profile and brain.
-
-A few things I notice right away:
-- You mentioned "{last[:80]}..." — let me unpack that.
-
-**Quick clarifying question before I go deeper:**
-What's the timeline here? Is this something you need to decide today, or do you have time to think it through?
-
-[/TO_USER]
-
-[BRAIN_UPDATE]
-# 🧠 Decision Brain
-
-## Core Identity
-Values: Autonomy, Deep technical mastery, Physical vitality.
-Vision: Building foundational AI infrastructure.
-Anti-goals: Status-chasing, golden handcuffs, burnout.
-
-## Active Decision
-User is weighing a choice. Key tension: short-term pressure vs. long-term alignment.
-
-## Compressed Wisdom (so far)
-- Always separate emotional urgency from logical necessity first.
-- When sensing panic, pause. The best decisions are made calm.
-- Every decision either compounds toward mastery or trades it for comfort.
-[/BRAIN_UPDATE]"""
 
     # ── Response parsing & persistence ───────────────────────────────
 

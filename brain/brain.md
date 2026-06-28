@@ -1,14 +1,16 @@
-# 🧠 Decision Brain
+# Decision Brain
 
 ## Core Identity
 Values: Autonomy, Deep technical mastery, Physical vitality.
 Vision: Building foundational AI infrastructure.
 Anti-goals: Status-chasing, golden handcuffs, burnout.
 
-## Active Decision
-User is weighing a choice. Key tension: short-term pressure vs. long-term alignment.
+## Key Pattern Identified
+User challenges verdicts when they touch on identity tension. Pushback is valuable signal — it means the user is engaged, not rejecting.
 
-## Compressed Wisdom (so far)
-- Always separate emotional urgency from logical necessity first.
-- When sensing panic, pause. The best decisions are made calm.
-- Every decision either compounds toward mastery or trades it for comfort.
+## Compressed Wisdom
+- Urgency is almost never the real constraint — it's a symptom of discomfort.
+- Profile alignment > every short-term metric. Always.
+- A correct decision today still feels right in 3 months. The pre-mortem test is honest.
+- When in doubt, zoom out to the anti-goals: if a choice feeds one, hard-stop.
+- Pushback is not rejection — it's a request for a deeper frame.
